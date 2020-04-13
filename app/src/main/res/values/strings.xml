@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Movies Listing</string>
+
+    <string name="popular_action">Popular</string>
+    <string name="top_rated_action">Top Rated</string>
+    <string name="release_date">Release Date: </string>
+
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
+
+    <string name="movie_poster_image_description">Movie Poster image</string>
+    <string name="star_icon_description">Vote ratings</string>
+</resources>
