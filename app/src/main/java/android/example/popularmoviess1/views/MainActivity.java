@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.example.popularmoviess1.R;
 import android.example.popularmoviess1.adapters.MoviesAdapter;
+import android.example.popularmoviess1.model.InternetConnectionModel;
 import android.example.popularmoviess1.model.MoviesModel;
 import android.example.popularmoviess1.model.MoviesRequestResponseModel;
+import android.example.popularmoviess1.network.ConnectionLiveData;
 import android.example.popularmoviess1.viewmodel.MoviesViewModel;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+        internetCheck();
         getPopularMovies();
     }
 
@@ -85,38 +88,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getPopularMovies(){
-        titleTextView.setText(R.string.popular);
         mMoviesModelList.clear();
         moviesViewModel.getPopularResponseModelLiveData().observe(this, moviesRequestResponseModel -> {
             if (moviesRequestResponseModel != null){
+
+                titleTextView.setText(R.string.popular);
                 List<MoviesModel> moviesModel = moviesRequestResponseModel.getMoviesModelList();
                 mMoviesModelList.addAll(moviesModel);
                 moviesAdapter.notifyDataSetChanged();
-            }else{
-                displaySnackBar();
             }
         });
     }
 
     private void getTopRatedMovies(){
-        titleTextView.setText(R.string.top_rated);
+
         mMoviesModelList.clear();
         moviesViewModel.getTopRatedResponseModelLiveData().observe(this, moviesRequestResponseModel -> {
             if (moviesRequestResponseModel != null){
+                titleTextView.setText(R.string.top_rated);
                 List<MoviesModel> moviesModels = moviesRequestResponseModel.getMoviesModelList();
                 mMoviesModelList.addAll(moviesModels);
                 moviesAdapter.notifyDataSetChanged();
-            }else{
-                displaySnackBar();
             }
         });
     }
 
+    private void internetCheck(){
+        moviesViewModel.connectionCheckingLiveData().observe(this, new Observer<InternetConnectionModel>() {
+            @Override
+            public void onChanged(InternetConnectionModel connection) {
+                if (!connection.isConnected()){
+                    displaySnackBar();
+                }
+            }
+        });
+    }
     private void displaySnackBar(){
-        RelativeLayout relativeLayout = findViewById(R.id.constraint_layout_main);
-        Snackbar snackbar = Snackbar.make(relativeLayout,"No Internet connection!", Snackbar.LENGTH_LONG)
+
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),"No Internet connection!", Snackbar.LENGTH_INDEFINITE)
                 .setAction("RETRY", v -> getPopularMovies());
         snackbar.setActionTextColor(Color.RED);
+        snackbar.show();
     }
 
 }

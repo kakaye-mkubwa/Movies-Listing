@@ -15,7 +15,6 @@ public class MovieFeedsRepository {
     private static final String TAG = MovieFeedsRepository.class.getSimpleName();
     private ApiRequest apiRequest;
 
-
     private static final String API_KEY = "";
 
     public MovieFeedsRepository() {
@@ -23,7 +22,6 @@ public class MovieFeedsRepository {
     }
 
     public LiveData<MoviesRequestResponseModel> getPopularMovies(){
-//        RequestBody requestPopular = RequestBody.create(MediaType.parse("text/plain"),apiKey);
         final MutableLiveData<MoviesRequestResponseModel> requestResponseModelMutableLiveData = new MutableLiveData<>();
 
         apiRequest.getPopularMovies(API_KEY)
@@ -63,5 +61,4 @@ public class MovieFeedsRepository {
                 });
         return requestResponseModelMutableLiveData;
     }
-
 }
